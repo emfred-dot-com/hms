@@ -25,6 +25,7 @@ main =
             Right e ->
               case (eval e) of
                 Left evalErr -> do
+                  putStrLn "Evaluation Error:"
                   putStrLn evalErr
                   return 1
                 Right dur -> do
