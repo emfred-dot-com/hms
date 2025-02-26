@@ -11,21 +11,58 @@ type EvalError = String
 eval :: Expr -> Either EvalError Duration
 eval expr =
   case expr of
-    (Dur d) : [] ->
-      Right (normalize d)
-    (Paren e) : rest ->
+    -- []
+    [] ->
+      Left "Empty expression."
+    -- [dur, ...]
+    Dur d : rest ->
+      case rest of
+        -- [dur]
+        [] ->
+          Right (normalize d)
+        -- [dur, dur, ...]
+        Dur d' : _rest' ->
+          Left ("Operator missing between durations '"
+                 ++ show d ++ "' and '" ++ show d' ++ "'.")
+        -- [dur, op]
+        Op op : [] ->
+          Left ("Infix operator '" ++ show op ++
+                "' missing second operand.")
+        -- [dur, op, dur, ...]
+        Op op : Dur d' : rest' ->
+          case op of
+            -- [dur, +, dur, ...]
+            Add ->
+              eval $ (Dur (durAdd d d')) : rest'
+            -- [dur, -, dur, ...]
+            Subtract ->
+              eval $ (Dur (durSubtract d d')) : rest'
+        -- [dur, op, op]
+        Op op : Op op' : _rest' ->
+          Left ("Infix operator '"
+                 ++ show op ++
+                 "' cannot be applied to infix operator '"
+                 ++ show op' ++ "'.")
+        -- [dur, op, paren, ...]
+        Op op : Paren e : rest' ->
+          case (eval e) of
+            Left err ->
+              Left err
+            Right result ->
+              eval $ (Dur d) : (Op op) : (Dur result) : rest'
+        -- [dur, paren, ...]
+        Paren e : _rest' ->
+          Left ("Operator missing between duration '" ++
+                 show d ++ "' and parenthesized expression '" ++
+                 show e ++ "'.")
+    -- [op, ...]
+    Op op : _rest ->
+      Left ("Infix operator '" ++ show op ++
+             "' cannot appear at the beginning of an expression.")
+    -- [paren, ...]
+    Paren e : rest ->
       case (eval e) of
-        Left err -> Left err
-        Right dur -> eval ((Dur dur) : rest)
-    (Dur d) : Op op : (Paren e) : rest ->
-      case (eval e) of
-        Left err -> Left err
-        Right dur -> eval ((Dur d) : (Op op) : (Dur dur) : rest)
-    (Dur d) : Op Add : (Dur d') : rest ->
-      eval $ (Dur (durAdd d d')) : rest
-    (Dur d) : Op Subtract : (Dur d') : rest ->
-      eval $ (Dur (durSubtract d d')) : rest
-    a : b : c : _rest ->
-      Left ("Eval error at \"" ++ show a ++ " " ++ show b ++ " " ++ show c ++ "\"")
-    rest ->
-      Left ("Eval error at \"" ++ show rest ++ "\"")
+        Left err ->
+          Left err
+        Right result ->
+          eval $ (Dur result) : rest
