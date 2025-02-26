@@ -66,7 +66,7 @@ carryMins d =
         rM = m `rem` 60
       in
         if qM > 0
-        then (HMS (h + qM) (m + rM) s)
+        then (HMS (h + qM) rM s)
         else d
     _ ->
       error "NOT REACHED: carrySecs: hmsIfy should have been called already"
