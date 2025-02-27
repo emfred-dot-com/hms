@@ -11,6 +11,7 @@ import Duration
 data Operation =
   Add
   | Subtract
+  deriving (Eq)
 
 instance Show Operation where
   show Add = "+"
@@ -20,6 +21,7 @@ data Term =
   Dur Duration
   | Op Operation
   | Paren Expr
+  deriving (Eq)
 
 instance Show Term where
   show (Dur d) = show d
