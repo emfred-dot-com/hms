@@ -1,21 +1,12 @@
-module Main (main) where
+module ParserTest (parserTests) where
 
 import Data.Either
 
 import Test.Tasty
 import Test.Tasty.HUnit
 
-import Expr
 import Parser
-
-main :: IO ()
-main = defaultMain tests
-
-tests :: TestTree
-tests = testGroup "Tests" [unitTests]
-
-unitTests :: TestTree
-unitTests = testGroup "Unit tests" [parserTests]
+import Expr
 
 parserTests :: TestTree
 parserTests = testGroup "Parser"

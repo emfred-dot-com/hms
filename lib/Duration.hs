@@ -75,17 +75,28 @@ normalize :: Duration -> Duration
 normalize d =
   carryMins $ carrySecs $ hmsIfy d
 
+type Seconds = Int
+
+toSeconds :: Duration -> Seconds
+toSeconds d =
+  case (hmsIfy d) of
+    HMS h m s ->
+      (60 * 60 * h) + (60 * m) + s
+    _ ->
+      error "NOT REACHED: toSeconds: hmsIfy should have been called already"
+
+toDuration :: Seconds -> Duration
+toDuration secs = normalize (S secs)
+
 durMath :: (Int -> Int -> Int)
            -> Duration -> Duration
            -> Duration
 durMath f d d' =
   let
-    dur = hmsIfy d
-    dur' = hmsIfy d'
+    secs = toSeconds d
+    secs' = toSeconds d'
   in
-    HMS (f (h dur) (h dur'))
-        (f (m dur) (m dur'))
-        (f (s dur) (s dur'))
+    toDuration (f secs secs')
 
 durAdd :: Duration -> Duration -> Duration
 durAdd = durMath (\a b -> a + b)

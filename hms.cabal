@@ -128,7 +128,10 @@ test-suite hms-test
     hs-source-dirs:   test
 
     -- The entrypoint to the test suite.
-    main-is:          test.hs
+    main-is:          Test.hs
+
+    other-modules:    ParserTest,
+                      MathTest
 
     -- Test dependencies.
     build-depends:
