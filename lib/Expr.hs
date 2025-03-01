@@ -23,6 +23,11 @@ data Term =
   Dur Duration
   | Op Operation
   | Paren Expr
-  deriving (Eq, Show)
+  deriving (Eq)
+
+instance Show Term where
+  show (Dur d) = show d
+  show (Op op) = show op
+  show (Paren e) = show e
 
 type Expr = [Term]

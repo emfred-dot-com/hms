@@ -3,6 +3,8 @@ module Eval
   )
 where
 
+import Data.List
+
 import Duration
 import Expr
 
@@ -55,8 +57,8 @@ eval expr =
         -- [dur, paren, ...]
         Paren e : _rest' ->
           Left ("Operator missing between duration '" ++
-                 show d ++ "' and parenthesized expression '" ++
-                 show e ++ "'.")
+                 show d ++ "' and parenthesized expression '(" ++
+                 (concat $ intersperse " " $ map show e) ++ ")'.")
     -- [op, ...]
     Op op : _rest ->
       Left ("Infix operator '" ++ show op ++
