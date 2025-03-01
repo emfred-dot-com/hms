@@ -6,6 +6,8 @@ module Expr
   )
 where
 
+import Data.List
+
 import Duration
 
 data Operation =
@@ -28,6 +30,7 @@ data Term =
 instance Show Term where
   show (Dur d) = show d
   show (Op op) = show op
-  show (Paren e) = show e
+  show (Paren e) =
+    "(" ++ (concat $ intersperse " " $ map show e) ++ ")"
 
 type Expr = [Term]

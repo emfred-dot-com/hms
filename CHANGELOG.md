@@ -40,3 +40,13 @@
 
 * Add a bunch of test cases to /test/MathTest.hs to verify that multiplication
   works properly / overflows properly.
+
+## 0.1.4.1 -- 2025-02-28
+
+* Vastly improved "Evaluation error:" error messages that involve parenthesized
+  expressions: these messages now show the parenthesized expressions with proper
+  parentheses and syntax. The error messages reflect the nesting depth of the
+  expression at which the eval error occurred.
+
+* ^ this involved changing the `Show` instance for the `Paren` constructor in
+  /lib/Expr.hs:`Term`.
