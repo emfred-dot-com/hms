@@ -87,7 +87,7 @@ toSeconds d =
       error "NOT REACHED: toSeconds: hmsIfy should have been called already"
 
 toDuration :: Seconds -> Duration
-toDuration secs = normalize (S secs)
+toDuration secs = S secs
 
 durMath :: (Int -> Int -> Int)
            -> Duration -> Duration
