@@ -37,6 +37,8 @@ eval expr =
             -- [dur, -, dur, ...]
             Subtract ->
               eval $ (Dur (durSubtract d d')) : rest'
+            Multiply ->
+              eval $ (Dur (durMultiply d d')) : rest'
         -- [dur, op, op]
         Op op : Op op' : _rest' ->
           Left ("Infix operator '"

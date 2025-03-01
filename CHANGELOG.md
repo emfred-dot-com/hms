@@ -33,3 +33,10 @@
 
 * Rename /test/test.hs to /test/Test.hs, so that it's consistent with the name
   styling of the other modules in the project.
+
+## 0.1.4.0 -- 2025-02-28
+
+* Add the multiplication ("*") operator.
+
+* Add a bunch of test cases to /test/MathTest.hs to verify that multiplication
+  works properly / overflows properly.

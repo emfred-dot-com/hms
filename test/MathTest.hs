@@ -1,7 +1,5 @@
 module MathTest (mathTests) where
 
-import Data.Either
-
 import Test.Tasty
 import Test.Tasty.HUnit
 
@@ -51,4 +49,24 @@ mathTests = testGroup "Math"
              Left _err -> []
              Right terms -> terms)
     @?= Right (HMS 0 0 (-1))
+  , testCase "'00:1 * 2 = 00:2'" $
+    eval (case parseExpr "00:1 * 2" of
+             Left _err -> []
+             Right terms -> terms)
+    @?= Right (HMS 0 0 2)
+  , testCase "'1:00 * 2 = 2:00'" $
+    eval (case parseExpr "1:00 * 2" of
+             Left _err -> []
+             Right terms -> terms)
+    @?= Right (HMS 0 2 0)
+  , testCase "'0:30 * 3 = 1:30'" $
+    eval (case parseExpr "0:30 * 3" of
+             Left _err -> []
+             Right terms -> terms)
+    @?= Right (HMS 0 1 30)
+  , testCase "'30:30 * 3 = 1:31:30'" $
+    eval (case parseExpr "30:30 * 3" of
+             Left _err -> []
+             Right terms -> terms)
+    @?= Right (HMS 1 31 30)
   ]

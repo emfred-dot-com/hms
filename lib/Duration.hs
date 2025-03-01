@@ -3,6 +3,7 @@ module Duration
   , normalize
   , durAdd
   , durSubtract
+  , durMultiply
   )
 where
 
@@ -103,3 +104,6 @@ durAdd = durMath (\a b -> a + b)
 
 durSubtract :: Duration -> Duration -> Duration
 durSubtract = durMath (\a b -> a - b)
+
+durMultiply :: Duration -> Duration -> Duration
+durMultiply = durMath (\a b -> a * b)

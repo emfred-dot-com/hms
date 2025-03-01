@@ -53,6 +53,7 @@ operation :: Parser Operation
 operation =
   (char '+' >> return Add)
   <|> (char '-' >> return Subtract)
+  <|> (char '*' >> return Multiply)
 
 exprTopLevel :: Parser Expr
 exprTopLevel = do

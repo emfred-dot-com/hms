@@ -11,11 +11,13 @@ import Duration
 data Operation =
   Add
   | Subtract
+  | Multiply
   deriving (Eq)
 
 instance Show Operation where
   show Add = "+"
   show Subtract = "-"
+  show Multiply = "*"
 
 data Term =
   Dur Duration
