@@ -15,13 +15,13 @@ parserTests = testGroup "Parser"
       (isLeft (parseExpr ""))
   , testCase "10 seconds, '10'" $
       parseExpr "10" @?=
-      Right [Dur (S 10)]
+      Right [Dur (HMS 0 0 10)]
   , testCase "10 seconds, '0:10'" $
       parseExpr "0:10" @?=
-      Right [Dur (MS 0 10)]
+      Right [Dur (HMS 0 0 10)]
   , testCase "10 seconds, '00:10'" $
       parseExpr "00:10" @?=
-      Right [Dur (MS 0 10)]
+      Right [Dur (HMS 0 0 10)]
   , testCase "10 seconds, '0:0:10'" $
       parseExpr "0:0:10" @?=
       Right [Dur (HMS 0 0 10)]
@@ -36,10 +36,10 @@ parserTests = testGroup "Parser"
       Right [Dur (HMS 0 0 10)]
   , testCase "23 minutes, '23:0'" $
       parseExpr "23:0" @?=
-      Right [Dur (MS 23 0)]
+      Right [Dur (HMS 0 23 0)]
   , testCase "23 minutes, '23:00'" $
       parseExpr "23:0" @?=
-      Right [Dur (MS 23 0)]
+      Right [Dur (HMS 0 23 0)]
   , testCase "23 minutes, '0:23:00'" $
       parseExpr "0:23:0" @?=
       Right [Dur (HMS 0 23 0)]

@@ -50,3 +50,12 @@
 
 * ^ this involved changing the `Show` instance for the `Paren` constructor in
   /lib/Expr.hs:`Term`.
+
+## 0.2.0.0 -- 2025-03-03
+
+* Remove the `MS` and `S` constructors from /lib/Duration:`Duration`, leaving
+  only the `HMS` constructor. This improves the code significantly, as the
+  removed constructors were useless outside of parsing and created awkward
+  patterns in the code like needing `hmsIfy` in case statements. `hmsIfy` is now
+  also gone, as it was used only to deal with the problem of the `MS` and `S`
+  constructors.

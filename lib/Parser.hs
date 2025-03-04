@@ -31,12 +31,12 @@ durationMS = do
   mins <- num
   _colon <- char ':'
   secs <- num
-  return (MS mins secs)
+  return (HMS 0 mins secs)
 
 durationS :: Parser Duration
 durationS = do
   secs <- num
-  return (S secs)
+  return (HMS 0 0 secs)
 
 expr :: Parser Expr
 expr = sepEndBy1 term (many (char ' '

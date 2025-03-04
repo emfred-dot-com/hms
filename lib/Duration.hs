@@ -13,22 +13,13 @@ data Duration =
   , m :: Int
   , s :: Int
   }
-  | MS
-  { m :: Int
-  , s :: Int
-  }
-  | S
-  { s :: Int
-  }
   deriving (Eq)
 
 instance Show Duration where
   show d =
-    let d' = hmsIfy d in
-      case d' of
-        HMS h m s ->
-          showDig h ++ ":" ++ showDig m ++ ":" ++ showDig s
-        _ -> error "NOT_REACHED: show duration: hmsIfy should have been called already"
+    case d of
+      HMS h m s ->
+        showDig h ++ ":" ++ showDig m ++ ":" ++ showDig s
     where
       showDig :: Int -> String
       showDig n =
@@ -36,13 +27,6 @@ instance Show Duration where
         in case str of
           _digit : [] -> "0" ++ str
           digits -> digits
-
-hmsIfy :: Duration -> Duration
-hmsIfy d =
-  case d of
-    HMS h m s -> HMS h m s
-    MS m s -> HMS 0 m s
-    S s -> HMS 0 0 s
 
 carrySecs :: Duration -> Duration
 carrySecs d =
@@ -55,8 +39,6 @@ carrySecs d =
         if qS > 0
         then (HMS h (m + qS) rS)
         else d
-    _ ->
-      error "NOT REACHED: carrySecs: hmsIfy should have been called already"
 
 carryMins :: Duration -> Duration
 carryMins d =
@@ -69,25 +51,21 @@ carryMins d =
         if qM > 0
         then (HMS (h + qM) rM s)
         else d
-    _ ->
-      error "NOT REACHED: carrySecs: hmsIfy should have been called already"
 
 normalize :: Duration -> Duration
 normalize d =
-  carryMins $ carrySecs $ hmsIfy d
+  carryMins $ carrySecs d
 
 type Seconds = Int
 
 toSeconds :: Duration -> Seconds
 toSeconds d =
-  case (hmsIfy d) of
+  case d of
     HMS h m s ->
       (60 * 60 * h) + (60 * m) + s
-    _ ->
-      error "NOT REACHED: toSeconds: hmsIfy should have been called already"
 
 toDuration :: Seconds -> Duration
-toDuration secs = S secs
+toDuration secs = HMS 0 0 secs
 
 durMath :: (Int -> Int -> Int)
            -> Duration -> Duration
