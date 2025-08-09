@@ -39,15 +39,15 @@ durationS = do
   return (HMS 0 0 secs)
 
 expr :: Parser Expr
-expr = sepEndBy1 term (many (char ' '
-                             <|> char '\n'
-                             <|> char '\t'))
+expr = many1 term
 
 term :: Parser Term
 term =
-  (try duration >>= (\d -> return (Dur d)))
-  <|> (try operation >>= (\o -> return (Op o)))
-  <|> ((char '(' *> expr <* char ')') >>= (\e -> return (Paren e)))
+  spaces *>
+    ((try duration >>= (\d -> return (Dur d)))
+    <|> (try operation >>= (\o -> return (Op o)))
+    <|> ((char '(' *> expr <* char ')') >>= (\e -> return (Paren e))))
+    <* spaces
 
 operation :: Parser Operation
 operation =

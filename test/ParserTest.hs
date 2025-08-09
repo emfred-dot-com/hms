@@ -58,4 +58,21 @@ parserTests = testGroup "Parser"
   , testCase "4 hours, '4:00:00'" $
       parseExpr "4:00:00" @?=
       Right [Dur (HMS 4 0 0)]
+  , whiteSpaceTests
+  ]
+
+whiteSpaceTests :: TestTree
+whiteSpaceTests = testGroup "Whitespace"
+  [ testCase "'1' == ' 1'" $
+      parseExpr "1" @?=
+      parseExpr " 1"
+  , testCase "'1' == '1 '" $
+      parseExpr "1" @?=
+      parseExpr "1 "
+  , testCase "'1' == '  1  '" $
+      parseExpr "1" @?=
+      parseExpr "  1  "
+  , testCase "'10 * (2 + 3)' == ' 10   *   (  2   +   3  ) '" $
+      parseExpr "10 * (2 + 3)" @?=
+      parseExpr " 10   *   (  2   +   3  ) "
   ]
