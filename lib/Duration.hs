@@ -78,10 +78,10 @@ durMath f d d' =
     toDuration (f secs secs')
 
 durAdd :: Duration -> Duration -> Duration
-durAdd = durMath (\a b -> a + b)
+durAdd = durMath (+)
 
 durSubtract :: Duration -> Duration -> Duration
-durSubtract = durMath (\a b -> a - b)
+durSubtract = durMath (-)
 
 durMultiply :: Duration -> Duration -> Duration
-durMultiply = durMath (\a b -> a * b)
+durMultiply = durMath (*)
