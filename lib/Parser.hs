@@ -6,37 +6,65 @@ where
 import Text.Parsec
 import Text.Parsec.String
 
+import Data.Ratio
+import Data.Scientific
+
 import Expr
 
-num :: Parser Int
-num = do
-  n <- many1 (oneOf ['0'..'9'])
-  return (read n)
+sci :: Parser Duration
+sci = (try frac) <|> ((try decimal) <|> int)
+
+frac :: Parser Duration
+frac = do
+  num <- digits
+  _slash <- char '/'
+  denom <- digits
+  let d :: Double
+      d = fromRational (read num % read denom)
+  return $ Duration (fromFloatDigits d)
+
+decimal :: Parser Duration
+decimal = do
+  whole <- digits
+  _dot <- char '.'
+  fractional <- digits
+  return $ Duration $
+    read $ whole ++ "." ++ fractional
+
+int :: Parser Duration
+int = do
+  num <- digits
+  return $ Duration $
+    read num
+
+digits :: Parser String
+digits = many1 $ oneOf ['0'..'9']
 
 duration :: Parser Duration
-duration =
-  (try durationHMS) <|> ((try durationMS) <|> durationS)
+duration = (try durationHMS) <|> ((try durationMS) <|> durationS)
 
 durationHMS :: Parser Duration
 durationHMS = do
-  hours <- num
+  hours <- sci
   _colon <- char ':'
-  mins <- num
+  mins <- sci
   _colon' <- char ':'
-  secs <- num
-  return (HMS hours mins secs)
+  secs <- sci
+  return $
+    (hours * 60.0 * 60.0) + (mins * 60.0) + secs
 
 durationMS :: Parser Duration
 durationMS = do
-  mins <- num
+  mins <- sci
   _colon <- char ':'
-  secs <- num
-  return (HMS 0 mins secs)
+  secs <- sci
+  return $
+    (mins * 60.0) + secs
 
 durationS :: Parser Duration
 durationS = do
-  secs <- num
-  return (HMS 0 0 secs)
+  secs <- sci
+  return secs
 
 expr :: Parser Expr
 expr = many1 term

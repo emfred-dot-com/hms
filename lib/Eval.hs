@@ -19,7 +19,7 @@ eval expr =
       case rest of
         -- [dur]
         [] ->
-          Right (normalize d)
+          Right d
         -- [dur, dur, ...]
         Dur d' : _rest' ->
           Left ("Operator missing between durations '"

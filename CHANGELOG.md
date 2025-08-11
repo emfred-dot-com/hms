@@ -59,3 +59,34 @@
   patterns in the code like needing `hmsIfy` in case statements. `hmsIfy` is now
   also gone, as it was used only to deal with the problem of the `MS` and `S`
   constructors.
+
+## 1.0.0.0 -- 2025-08-11
+
+* Add support for fractional numbers of seconds at arbitrary precision, using
+  the Data.Scientific library. All of the following notations are supported:
+
+  ```
+  > hms "10.24 + 20.35"
+  # 00:00:30.59
+
+  > hms "0.5:0:0"
+  # 00:30:00.0
+
+  > hms "00:1/4:00"
+  # 00:00:15.0
+  ```
+
+  This new feature makes hms easily compatible with tools like `soxi`:
+
+  ```
+  soxi -d *.mp3 | xargs echo | tr ' ' '+' | xargs hms
+  soxi -D *.mp3 | xargs echo | tr ' ' '+' | xargs hms
+  ```
+
+  or `ffprobe`:
+
+  ```
+  for audio_file in *.mp3; do
+    ffprobe -i $audio_file -show_entries format=duration -v quiet -of csv="p=0"
+  done | xargs echo | tr ' ' '+' | xargs hms
+  ```
