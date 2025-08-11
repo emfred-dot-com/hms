@@ -2,6 +2,8 @@
 
 module Duration
   ( Duration (..)
+  , DisplayMode (..)
+  , showDuration
   , durAdd
   , durSubtract
   , durMultiply
@@ -20,8 +22,11 @@ data HMS = HMS
   , _minutes :: Int
   , _seconds :: Scientific }
 
-instance Show Duration where
-  show d =
+data DisplayMode =
+  Decimal | NoDecimal
+
+showDuration :: DisplayMode -> Duration -> String
+showDuration mode d =
     case (toHMS $ abs d) of
       HMS h m s ->
         if d < 0.0
@@ -37,14 +42,19 @@ instance Show Duration where
 
       showSci :: Scientific -> String
       showSci n =
-        let str = show n
-        in if (abs n) < 10.0
-           then case str of
-                  '-' : rest ->
-                    '-' : '0' : rest
-                  _ ->
-                    '0' : str
-           else str
+        case mode of
+          Decimal ->
+            let str = show n
+            in if n < 10.0
+               then '0' : str
+               else str
+          NoDecimal ->
+            let dbl = toRealFloat n :: Double
+                int = round dbl :: Int
+            in showInt int
+
+instance Show Duration where
+  show = showDuration Decimal
 
 toHMS :: Duration -> HMS
 toHMS (Duration secs) =

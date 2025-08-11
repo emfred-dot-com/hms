@@ -2,6 +2,7 @@ module Main where
 
 import System.Environment (getArgs)
 
+import Duration
 import Eval
 import Parser
 
@@ -29,5 +30,10 @@ main =
                   putStrLn evalErr
                   return 1
                 Right dur -> do
-                  putStrLn $ show dur
+                  let output =
+                        if '.' `elem` expr ||
+                           '/' `elem` expr
+                        then showDuration Decimal dur
+                        else showDuration NoDecimal dur
+                  putStrLn output
                   return 0
