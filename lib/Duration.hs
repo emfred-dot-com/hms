@@ -22,9 +22,11 @@ data HMS = HMS
 
 instance Show Duration where
   show d =
-    case (toHMS d) of
+    case (toHMS $ abs d) of
       HMS h m s ->
-        showInt h ++ ":" ++ showInt m ++ ":" ++ showSci s
+        if d < 0.0
+        then '-' : showInt h ++ ":" ++ showInt m ++ ":" ++ showSci s
+        else showInt h ++ ":" ++ showInt m ++ ":" ++ showSci s
     where
       showInt :: Int -> String
       showInt n =
