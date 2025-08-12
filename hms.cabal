@@ -29,7 +29,7 @@ synopsis:           HH:MM:SS durations calculator
 description:        hms is a calculator over durations in the HH:MM:SS format
 
 -- URL for the project homepage or repository.
-homepage:           https://github.com/emfred-dot-com/hms
+homepage:           https://emfred.com/programs/hms
 
 -- The license under which the package is released.
 license:            MIT
@@ -137,6 +137,7 @@ test-suite hms-test
     -- Test dependencies.
     build-depends:
         base,
+        scientific,
         hms,
         tasty,
         tasty-hunit
